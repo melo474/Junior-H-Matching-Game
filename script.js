@@ -17,6 +17,7 @@ let cards = [
     "card7.jpg?v=1710262709248",
     "card8.jpg?v=1710262717196",
 ];
+let clickedIds = [];
 
 // Button to Show Deck
 buttonShow.onclick = function() {
@@ -32,28 +33,89 @@ buttonShow.onclick = function() {
 };
 
 // Button to Double Deck
-buttonDouble.onclick=function(){
-let target = cards.length * 2;
+buttonDouble.onclick = function() {
+    let target = cards.length * 2;
     console.log("deck has" + cards.length + "cards.");
     for (let card of cards) {
-        if(cards.length!==target) {
+        if (cards.length !== target) {
             cards.push(card);
-            game.insertAdjacentHTML("beforeend", "div style='background-image:url("+ url + card+")'class='card'>");
-            
-}
+            game.insertAdjacentHTML("beforeend", "<div style='background-image:url(" + url + card + ")' class='card'>");
+
+        }
     }
 };
-console.log("Now the deck has"+ cards.length+"cards.");
-buttonDouble.style.color="green";
+console.log("Now the deck has" + cards.length + "cards.");
+buttonDouble.style.color = "green";
+
 // Button to Shuffle Cards
 
+function shuffle(array) {
+    let currentIndex = array.length,
+        randomIndex;
+    // While there are elements to shuffle...
+    while (currentIndex > 0) {
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex = currentIndex - 1;
+        // Swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]
+        ];
+    }
+    return array;
+}
+buttonShuffle.onclick = function() {
+    shuffle(cards);
+    console.log("Im shuffling the cards");
+    let i = 0;
+    game.innerHTML = "";
+    for (let card of cards) {
+        game.insertAdjacentHTML("beforeend",
+            "<div style='background-image: url(" + url + card + ")'id='" + i + "' class='card'>"
+        );
+        i = i + 1;
+    }
+};
 
 // Button to Flip All Cards
-
+buttonFlip.onclick = function() {
+    let i = 0;
+    for (let card of cards) {
+        document.getElementById(i).style.backgroundImage = "";
+        i = i + 1;
+    }
+};
 
 // Here we need a function for clicking on individual cards.
-// (It won't work until we finish writing it.)
+
+
 $(document).click(function(event) {
-    // Get the id property of the clicked thing.
+
     let clickedId = event.target.id;
+    console.log(clickedId);
+
+    if (clickedId !== "") {
+        document.getElementById(clickedId).style.backgroundImage = "url('" + url + cards[clickedId] + "')'";
+        clickedIds.push(clickedId);
+        console.log(clickedIds);
+        if (clickedIds.length === 2) {
+            let card1pictrue = document.getElementById(clickedIds[0]).style.backgroundImage;
+            let card2pictrue = document.getElementById(clickedIds[1]).style.backgroundImage;
+            console.log(card1pictrue);
+            console.log(card2pictrue);
+            if (card1pictrue === card2pictrue) {
+                console.log("match");
+                document.getElementById(clickedIds[0]).id = "";
+                document.getElementById(clickedIds[1]).id = "";
+                clickedIds = [];
+                console.log(clickedIds);
+            }
+        } else if (clickedIds.length > 2) {
+            document.getElementById(clickedIds[0]).style.backgroundImage = "";
+            document.getElementById(clickedIds[1]).style.backgroundImage = "";
+            clickedIds = [];
+            clickedIds.push(clickedId);
+            console.log(clickedIds);
+        }
+    }
 });
