@@ -95,7 +95,8 @@ $(document).click(function(event) {
     console.log(clickedId);
 
     if (clickedId !== "") {
-        document.getElementById(clickedId).style.backgroundImage = "url('" + url + cards[clickedId] + "')'";
+        document.getElementById(clickedId).style.backgroundImage = "url('" + url + cards[clickedId]+"')";
+        console.log(url + cards[clickedId]);
         clickedIds.push(clickedId);
         console.log(clickedIds);
         if (clickedIds.length === 2) {
@@ -116,6 +117,7 @@ $(document).click(function(event) {
             clickedIds = [];
             clickedIds.push(clickedId);
             console.log(clickedIds);
+            console.log("no match");
         }
     }
 });
